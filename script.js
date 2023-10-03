@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Replace the API endpoint with your backend's endpoint
         fetch("http://localhost:3001/api/verify-title", {
             method: "POST",
             body: JSON.stringify({ titleCode }),
@@ -24,14 +23,16 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.isGood) {
+                if (data.isGood === "good") { // Check the response for "good"
                     verificationResult.innerText = `${titleCode} is good for export.`;
-                    verificationResult.classList.remove("not-good"); // Remove not-good class
-                    verificationResult.classList.add("good"); // Add good class
-                } else {
+                    verificationResult.classList.remove("not-good");
+                    verificationResult.classList.add("good");
+                } else if (data.isGood === "not good") { // Check the response for "not good"
                     verificationResult.innerText = `${titleCode} is not good for export.`;
-                    verificationResult.classList.remove("good"); // Remove good class
-                    verificationResult.classList.add("not-good"); // Add not-good class
+                    verificationResult.classList.remove("good");
+                    verificationResult.classList.add("not-good");
+                } else {
+                    verificationResult.innerText = "An error occurred.";
                 }
 
                 // Clear the input field after displaying the result

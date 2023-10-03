@@ -2,16 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-//const port = 3001;
-const port = process.env.PORT || 3000;
-const http = require('http');
+const port = 3001;
+//const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
+///app.get("/", (req, res) => {
+//    res.sendFile(path.join(__dirname, "index.html"));
+//});
 
 // Here we check if the title is good or not: check by keywords in the title code
 // Convert the title code to lowercase for case-insensitive comparison
@@ -30,8 +29,12 @@ function isTitleGood(titleCode) {
         lowercaseTitleCode.includes(keyword)
     );
 
-    // Return true if either certificate or title keywords are found
-    return containsCertificate && containsTitle;
+    // Return "good" if both certificate and title keywords are found, otherwise return "not good"
+    if (containsCertificate && containsTitle) {
+        return "good";
+    } else {
+        return "not good";
+    }
 }
 
 app.post("/api/verify-title", (req, res) => {
